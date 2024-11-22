@@ -1,45 +1,38 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function Upload() {
+function Pdf() {
   const navigate = useNavigate();
 
   const handleFileChange = (event) => {
-    const uploadedFile = event.target.files[0];
-    if (uploadedFile && uploadedFile.type === "application/pdf") {
-      navigate("/view", { state: { file: uploadedFile } });
+    const file = event.target.files[0];
+    if (file && file.type === "application/pdf") {
+      const pdfUrl = URL.createObjectURL(file); // Create a Blob URL for the PDF
+
+      // Navigate to the View page with the PDF URL and file
+      navigate("/view", {
+        state: {
+          pdfUrl,
+          file, // Pass the file to process in the View page
+        },
+      });
     } else {
       alert("Please upload a valid PDF file.");
     }
   };
 
-  const handleUploadClick = () => {
-    document.querySelector('input[type="file"]').click();
-  };
-
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Upload PDF</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold text-blue-600 mb-6">Upload PDF</h1>
       <input
+        id="fileInput"
         type="file"
-        accept="application/pdf"
+        accept=".pdf"
         onChange={handleFileChange}
-        style={{ display: "none" }}
+        className="mb-4"
       />
-      <button
-        onClick={handleUploadClick}
-        style={{
-          padding: "10px 20px",
-          backgroundColor: "#007BFF",
-          color: "white",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        Upload PDF
-      </button>
     </div>
   );
 }
 
-export default Upload;
+export default Pdf;
